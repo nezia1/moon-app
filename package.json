@@ -11,6 +11,7 @@
     "core-js": "^3.6.4",
     "moment": "^2.25.3",
     "normalize-scss": "^7.0.1",
+    "suncalc": "^1.8.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {
