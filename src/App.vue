@@ -41,33 +41,46 @@ export default {
     },
     currentFormattedMoonPhase() {
       let formattedMoonPhase;
-      const { phase } = SunCalc.getMoonIllumination(
+      const phase = Math.round((SunCalc.getMoonIllumination(
         this.currentDate,
         this.userLocation.coords.latitude,
         this.userLocation.coords.longitude,
-      );
+      ).phase + Number.EPSILON) * 100) / 100;
 
-      switch (phase.toFixed(2)) {
-        case '0': {
+      switch (phase) {
+        case 0: {
           formattedMoonPhase = 'The moon is a new moon today';
           break;
         }
-        case '0.25': {
+        case 0.25: {
           formattedMoonPhase = 'The moon is one quarter today';
           break;
         }
-        case '0.5': {
+        case 0.5: {
           formattedMoonPhase = 'The moon is full today';
           break;
         }
-        case '0.75': {
+        case 0.75: {
           formattedMoonPhase = 'The moon is last quarter today';
           break;
         }
         default: {
+          if (phase < 0 && phase > 0.25) {
+            formattedMoonPhase = 'The moon is waxing crescent today';
+          }
+          if (phase > 0.25 && phase < 0.5) {
+            formattedMoonPhase = 'The moon is waxing gibbous today';
+          }
+          if (phase > 0.5 && phase < 0.75) {
+            formattedMoonPhase = 'The moon is waning gibbous today';
+          }
+          if (phase > 0.75) {
+            formattedMoonPhase = 'The moon is waning crescent today';
+          }
           break;
         }
       }
+
       return formattedMoonPhase;
     },
   },
@@ -92,30 +105,51 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Proza+Libre&display=swap");
 
 :root {
-  font-size: 16px;
+  font-size: 1.6vw;
+  @media screen and (min-width: 420px) {
+    font-size: 1.2vw;
+  }
+  @media screen and (min-width: 768px) {
+    font-size: 0.8vw;
+  }
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
 }
 
 #app {
   display: grid;
-  grid-template-rows: 3fr 2fr 1fr;
+  grid-template-rows: 2fr 2fr 1fr;
+  @media screen and (min-width: 420px) {
+    grid-template-rows: 3fr 2fr 1fr;
+  }
+
   text-align: center;
   font-family: Open Sans, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: white;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(255deg, #a4508b 0%, #5f0a87 100%) 0% 0%;
   text-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
   opacity: 1;
 }
+
 #app .moon {
-  width: 20em;
-  height: 20em;
+  width: 35em;
+  height: 35em;
   border-radius: 50%;
   background-color: #a29595;
   justify-self: center;
   align-self: center;
+  @media screen and (min-width: 420px) {
+    width: 20em;
+    height: 20em;
+  }
 }
 
 #app h1,
@@ -134,7 +168,11 @@ h3 {
 }
 
 #app h3 {
-  font-size: 2em;
+  font-size: 3.5em;
+  text-align: left;
+  @media screen and (min-width: 768px) {
+    font-size: 2em;
+  }
 }
 
 #app footer {
