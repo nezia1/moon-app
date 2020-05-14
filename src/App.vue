@@ -1,25 +1,76 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="!loading">
     <div class="moon"></div>
     <header>
-      <h1>The moon is full today</h1>
+      <h1>{{currentFormattedMoonPhase}}</h1>
       <h2>Today is {{currentDate.format("MMMM Do, YYYY")}}</h2>
     </header>
 
     <footer>
-      <h3>Seoul, South Korea</h3>
+      <h3>{{`${userLocation.coords.latitude}, ${userLocation.coords.longitude}`}}</h3>
     </footer>
   </div>
 </template>
 
 <script>
 const moment = require('moment');
+const SunCalc = require('suncalc');
 
 export default {
   name: 'App',
+  data() {
+    return {
+      userLocation: {},
+      loading: true,
+    };
+  },
+  async created() {
+    if ('geolocation' in navigator) {
+      this.userLocation = await this.getUserLocation();
+      this.loading = false;
+    }
+  },
   computed: {
     currentDate() {
       return moment();
+    },
+    currentFormattedMoonPhase() {
+      let formattedMoonPhase;
+      const { phase } = SunCalc.getMoonIllumination(
+        this.currentDate,
+        this.userLocation.coords.latitude,
+        this.userLocation.coords.longitude,
+      );
+
+      switch (phase.toFixed(2)) {
+        case '0': {
+          formattedMoonPhase = 'The moon is a new moon today';
+          break;
+        }
+        case '0.25': {
+          formattedMoonPhase = 'The moon is one quarter today';
+          break;
+        }
+        case '0.5': {
+          formattedMoonPhase = 'The moon is full today';
+          break;
+        }
+        case '0.75': {
+          formattedMoonPhase = 'The moon is last quarter today';
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      return formattedMoonPhase;
+    },
+  },
+  methods: {
+    getUserLocation(options = {}) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+      });
     },
   },
 };
