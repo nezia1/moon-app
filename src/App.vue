@@ -7,7 +7,7 @@
     </header>
 
     <footer>
-      <h3>{{`${userLocation.coords.latitude}, ${userLocation.coords.longitude}`}}</h3>
+      <h3>{{geocodedLocation}}</h3>
     </footer>
   </div>
 </template>
@@ -21,12 +21,17 @@ export default {
   data() {
     return {
       userLocation: {},
+      geocodedLocation: '',
       loading: true,
     };
   },
   async created() {
     if ('geolocation' in navigator) {
       this.userLocation = await this.getUserLocation();
+      this.geocodedLocation = await this.getGeocodedLocation(
+        this.userLocation.coords.latitude,
+        this.userLocation.coords.longitude,
+      );
       this.loading = false;
     }
   },
@@ -71,6 +76,11 @@ export default {
       return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, options);
       });
+    },
+    async getGeocodedLocation(lat, lon) {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+      const { address } = await response.json();
+      return `${address.state}, ${address.country}`;
     },
   },
 };
