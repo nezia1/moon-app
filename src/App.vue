@@ -8,6 +8,11 @@
 
     <footer>
       <h3>{{geocodedLocation}}</h3>
+      <!-- <div class="github-logo">
+        <a href="https://github.com/nezia1" target="_blank">
+          <img src="@/assets/github.png" />
+        </a>
+      </div>-->
     </footer>
   </div>
 </template>
@@ -168,6 +173,7 @@ h3 {
 }
 
 #app h3 {
+  margin-block-end: 0.3em;
   font-size: 3.5em;
   text-align: left;
   @media screen and (min-width: 768px) {
@@ -176,8 +182,11 @@ h3 {
 }
 
 #app footer {
-  justify-self: left;
+  display: flex;
+  width: 98%;
+  flex-direction: row;
+  justify-content: space-between;
+  justify-self: center;
   align-self: flex-end;
-  margin-left: 2em;
 }
 </style>
