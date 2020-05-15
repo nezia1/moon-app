@@ -173,9 +173,7 @@ h3 {
 }
 
 #app h3 {
-  margin-block-end: 0.3em;
   font-size: 3.5em;
-  text-align: left;
   @media screen and (min-width: 768px) {
     font-size: 2em;
   }
@@ -185,8 +183,18 @@ h3 {
   display: flex;
   width: 98%;
   flex-direction: row;
-  justify-content: space-between;
   justify-self: center;
   align-self: flex-end;
+  @media screen and (min-width: 768px) {
+    justify-content: space-between;
+  }
+}
+
+#app footer h3 {
+  margin-block-end: 0.3em;
+  flex: 1 0 auto;
+  @media screen and (min-width: 768px) {
+    text-align: left;
+  }
 }
 </style>
