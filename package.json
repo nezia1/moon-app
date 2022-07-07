@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.4",
-    "moment": "^2.25.3",
+    "moment": "^2.29.4",
     "normalize-scss": "^7.0.1",
     "suncalc": "^1.8.0",
     "vue": "^2.6.11"
